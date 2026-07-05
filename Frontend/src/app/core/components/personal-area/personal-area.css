@@ -1,0 +1,81 @@
+pre::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+pre::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+/* --- SCROLLBAR CODER (VIOLA) --- */
+.coder-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.coder-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+
+.coder-scrollbar::-webkit-scrollbar-thumb {
+    background: #a855f7; /* Viola Coder */
+    border-radius: 8px;
+    border: 2px solid #0f0b18;
+}
+
+.coder-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c084fc;
+}
+
+/* --- SCROLLBAR TESTER (ROSSO) --- */
+.tester-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.tester-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+
+.tester-scrollbar::-webkit-scrollbar-thumb {
+    background: #ef4444; /* Rosso Tester */
+    border-radius: 8px;
+    border: 2px solid #1a0c0c;
+}
+
+.tester-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #f87171;
+}
+
+/* Compatibilità Firefox */
+.coder-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #a855f7 rgba(0, 0, 0, 0.5);
+}
+
+.tester-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #ef4444 rgba(0, 0, 0, 0.5);
+}

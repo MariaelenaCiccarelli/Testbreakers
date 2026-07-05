@@ -1,0 +1,332 @@
+<section class="min-h-screen bg-[#0a0f1e] text-white p-4 md:p-8 font-sans relative pt-24">
+  <div class="max-w-5xl mx-auto">
+
+    <button routerLink="/home" 
+        class="absolute top-8 left-8 flex items-center gap-2 px-4 py-2 border border-white/10 rounded-xl hover:bg-white/5 transition-all group">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-400 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span class="text-[10px] font-black text-white uppercase tracking-[0.2em]">BACK HOME</span>
+    </button>
+
+    @if (isLoading()) {
+      <div class="flex flex-col items-center justify-center py-20">
+        <div class="animate-spin rounded-full h-10 w-10 border-2 border-t-transparent border-indigo-500 mb-4"></div>
+        <p class="text-xs uppercase tracking-[0.2em] text-indigo-400 font-bold animate-pulse">Loading...</p>
+      </div>
+    } @else {
+
+      <div class="bg-[#111827] border-2 border-indigo-500/20 rounded-[2rem] p-6 mb-8 flex flex-col sm:flex-row items-center gap-6 shadow-xl shadow-indigo-500/5 relative overflow-hidden">
+        <div (click)="openAvatarModal()" class="relative w-24 h-24 flex-shrink-0 cursor-pointer group select-none">
+          <div class="absolute inset-0 bg-indigo-500/20 rounded-full blur-xl group-hover:bg-indigo-500/40 transition-all"></div>
+          <div class="absolute w-20 h-20 rounded-full bg-slate-200 inset-2"></div>
+          <img [src]="'/uploads/' + profileData()?.avatar" class="relative z-10 w-20 h-20 rounded-full object-cover border-4 border-indigo-500 m-2 group-hover:opacity-40 transition-all">
+          <div class="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+            <span class="text-[9px] font-black tracking-widest bg-indigo-600 px-2 py-1 rounded text-white uppercase shadow-md">EDIT</span>
+          </div>
+        </div>
+        <div class="text-center sm:text-left flex-1 z-10">
+          <h3 class="text-indigo-400 uppercase tracking-[0.3em] text-[10px] font-black">PERSONAL AREA</h3>
+          <h1 class="text-3xl font-black italic uppercase tracking-tighter text-white font-mono mt-1">
+            {{ profileData()?.handle }}
+          </h1>
+          <div class="flex flex-wrap justify-center sm:justify-start gap-4 mt-3">
+            <span class="text-xs font-bold bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-md text-amber-400 uppercase tracking-wider">
+              🔥 Actual Streak: {{ profileData()?.actualStreak }}
+            </span>
+            <span class="text-xs font-bold bg-indigo-500/10 border border-indigo-500/30 px-3 py-1 rounded-md text-indigo-400 uppercase tracking-wider">
+              🏆 Best Streak: {{ profileData()?.bestStreak }}
+            </span>
+          </div>
+        </div>
+
+        <div class="sm:text-right text-center border-t sm:border-t-0 border-white/5 pt-4 sm:pt-0 w-full sm:w-auto z-10">
+          <p class="text-gray-500 font-black uppercase tracking-widest text-[10px]">GLOBAL RANK</p>
+          <p class="text-4xl font-black italic font-mono text-indigo-400 tracking-tighter mt-1">
+            #{{ profileData()?.globalRank }}
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        
+        <div class="bg-[#111827] border border-indigo-500/30 bg-gradient-to-br from-indigo-500/5 to-transparent p-5 rounded-2xl shadow-lg relative overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start mb-4">
+              <h4 class="text-indigo-400 text-xs font-black uppercase tracking-widest">💻 STATS AS CODER</h4>
+              <span class="font-mono text-indigo-400 font-black text-sm italic">Rank: #{{ profileData()?.coderRank }}</span>
+            </div>
+            <div class="space-y-2 mb-4">
+              <div class="flex justify-between text-sm text-gray-400"><span>Match Played as Coder:</span><span class="font-mono text-white font-bold">{{ profileData()?.coderMatches }}</span></div>
+              <div class="flex justify-between text-sm text-gray-400"><span>Victories as Coder:</span><span class="font-mono text-indigo-400 font-bold">{{ profileData()?.coderWins }}</span></div>
+            </div>
+          </div>
+          <div class="border-t border-white/5 pt-3">
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-[11px] text-gray-500 font-black uppercase tracking-wider">WIN RATE</span>
+              <span class="text-xs font-mono font-bold text-indigo-400">{{ profileData()?.coderWinRate }}%</span>
+            </div>
+            <div class="w-full h-1.5 bg-black/40 border border-white/5 overflow-hidden rounded-full">
+              <div class="h-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]" [style.width.%]="profileData()?.coderWinRate"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#111827] border border-red-500/30 bg-gradient-to-br from-red-500/5 to-transparent p-5 rounded-2xl shadow-lg relative overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start mb-4">
+              <h4 class="text-red-500 text-xs font-black uppercase tracking-widest">🔍 STATS AS TESTER</h4>
+              <span class="font-mono text-red-500 font-black text-sm italic">Rank: #{{ profileData()?.testerRank }}</span>
+            </div>
+            <div class="space-y-2 mb-4">
+              <div class="flex justify-between text-sm text-gray-400"><span>Match Played as Tester:</span><span class="font-mono text-white font-bold">{{ profileData()?.testerMatches }}</span></div>
+              <div class="flex justify-between text-sm text-gray-400"><span>Victories as Tester:</span><span class="font-mono text-red-500 font-bold">{{ profileData()?.testerWins }}</span></div>
+            </div>
+          </div>
+          <div class="border-t border-white/5 pt-3">
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-[11px] text-gray-500 font-black uppercase tracking-wider">WIN RATE</span>
+              <span class="text-xs font-mono font-bold text-red-500">{{ profileData()?.testerWinRate }}%</span>
+            </div>
+            <div class="w-full h-1.5 bg-black/40 border border-white/5 overflow-hidden rounded-full">
+              <div class="h-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]" [style.width.%]="profileData()?.testerWinRate"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#111827] border border-purple-500/30 bg-gradient-to-br from-purple-500/5 to-transparent p-5 rounded-2xl shadow-lg relative overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start mb-4">
+              <h4 class="text-purple-400 text-xs font-black uppercase tracking-widest">📊 GLOBAL STATS</h4>
+              <span class="font-mono text-purple-400 font-black text-sm italic">Rank: #{{ profileData()?.globalRank }}</span>
+            </div>
+            <div class="space-y-2 mb-4">
+              <div class="flex justify-between text-sm text-gray-400"><span>Total Matches:</span><span class="font-mono text-white font-bold">{{ profileData()?.matchesDone }}</span></div>
+              <div class="flex justify-between text-sm text-gray-400"><span>Total Victories:</span><span class="font-mono text-purple-400 font-bold">{{ profileData()?.totalWins }}</span></div>
+            </div>
+          </div>
+          <div class="border-t border-white/5 pt-3">
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-[11px] text-gray-500 font-black uppercase tracking-wider">GLOBAL WIN RATE</span>
+              <span class="text-xs font-mono font-bold text-purple-400">{{ profileData()?.globalWinRate }}%</span>
+            </div>
+            <div class="w-full h-1.5 bg-black/40 border border-white/5 overflow-hidden rounded-full">
+              <div class="h-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]" [style.width.%]="profileData()?.globalWinRate"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bg-[#111827] border border-white/5 rounded-[1.5rem] overflow-hidden shadow-2xl mb-12">
+        <div class="p-4 bg-black/20 border-b border-white/5">
+          <h2 class="text-sm font-black uppercase tracking-[0.2em] text-gray-400">🗂️ MATCH ARCHIVE</h2>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-center border-collapse">
+            <thead>
+              <tr class="border-b border-white/5 bg-black/40 text-gray-400 font-black text-[11px] md:text-xs uppercase tracking-[0.15em]">
+                <th class="py-4 px-4 text-left">CHALLENGE</th>
+                <th class="py-4 px-4">ROLE</th>
+                <th class="py-4 px-4">OPPONENT</th>
+                <th class="py-4 px-4">OUTCOME</th>
+                <th class="py-4 px-4">DATE</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/[0.03]">
+              @for (match of matchHistory(); track match.matchId) {
+                <tr (click)="openMatchDetails(match)" class="hover:bg-white/[0.02] transition-colors group cursor-pointer">
+                  <td class="py-4 px-4 text-left font-bold text-gray-200 group-hover:text-indigo-400 transition-colors">
+                    {{ match.challengeTitle }}
+                  </td>
+                  <td class="py-4 px-4 font-mono text-xs uppercase tracking-wider">
+                    <span [ngClass]="match.roleInMatch === 'coder' ? 'text-indigo-400' : 'text-red-500'">
+                      {{ match.roleInMatch }}
+                    </span>
+                  </td>
+                  <td class="py-4 px-4 text-gray-400 font-bold">
+                    &#64;{{ match.opponent }}
+                  </td>
+                  <td class="py-4 px-4 font-black text-xs uppercase tracking-widest">
+                    @if (match.result === 'WIN') {
+                      <span class="text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-1 rounded-md">WIN</span>
+                    }
+                    @if (match.result === 'LOSS') {
+                      <span class="text-rose-500 bg-rose-500/10 border border-rose-500/20 px-2 py-1 rounded-md">LOSS</span>
+                    }
+                    @if (match.result === 'ABANDONED') {
+                      <span class="text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-1 rounded-md">ABANDONED</span>
+                    }
+                  </td>
+                  <td class="py-4 px-4 text-xs text-gray-500 font-mono">
+                    {{ match.date | date:'dd/MM/yyyy HH:mm' }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          @if (matchHistory().length === 0) {
+            <div class="p-8 text-center text-gray-500 font-bold uppercase tracking-widest text-xs">
+              YOU HAVEN'T COMPLETED A MATCH YET.
+            </div>
+          }
+        </div>
+      </div>
+
+    }
+  </div>
+
+  @if (isModalOpen() && selectedMatch()) {
+    <div class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fade-in">
+      <div class="bg-[#111827] border-2 border-indigo-500/40 max-w-5xl w-full rounded-[2.5rem] p-6 max-h-[92vh] overflow-y-auto shadow-[0_0_30px_rgba(99,102,241,0.15)] flex flex-col justify-between">
+        
+        <div class="flex justify-between items-start border-b border-white/10 pb-4 mb-4">
+          <div>
+            <h3 class="text-indigo-400 text-[10px] font-black uppercase tracking-widest">Match Report</h3>
+            <h2 class="text-2xl font-black uppercase italic tracking-tight mt-0.5 text-white">
+              Challenge: {{ selectedMatch().challengeTitle }}
+            </h2>
+          </div>
+          <button (click)="closeModal()" class="text-gray-400 hover:text-white text-xs font-black uppercase tracking-widest bg-white/5 border border-white/10 px-4 py-2 rounded-xl transition-all active:scale-95">
+            Close Terminal X
+          </button>
+        </div>
+
+        <div class="bg-[#0a0f1e] border border-white/5 p-4 rounded-2xl mb-6 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-gray-500 font-black uppercase tracking-wider">Challenge Outcome:</span>
+            @if (selectedMatch().result === 'WIN') {
+              <span class="text-xs font-black px-3 py-1 rounded-md tracking-widest uppercase text-emerald-400 bg-emerald-500/10 border border-emerald-500/30">WIN</span>
+            }
+            @if (selectedMatch().result === 'LOSS') {
+              <span class="text-xs font-black px-3 py-1 rounded-md tracking-widest uppercase text-rose-500 bg-rose-500/10 border border-rose-500/30">LOSS</span>
+            }
+            @if (selectedMatch().result === 'ABANDONED') {
+              <span class="text-xs font-black px-3 py-1 rounded-md tracking-widest uppercase text-amber-500 bg-amber-500/10 border border-amber-500/30">ABANDONED</span>
+            }
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+          
+          <div class="bg-[#0b0f19] border border-indigo-500/30 rounded-2xl p-4 flex flex-col justify-between shadow-lg shadow-indigo-950/20">
+            <div class="flex items-center justify-between border-b border-indigo-500/20 pb-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-base">💻</span>
+                <span class="text-indigo-400 font-black text-xs uppercase tracking-widest">CODER SUBSYSTEM</span>
+              </div>
+              <span class="font-mono text-xs font-bold text-white uppercase bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded">
+                {{ selectedMatch().roleInMatch === 'coder' ? profileData()?.handle : selectedMatch().opponent }}
+              </span>
+            </div>
+            
+            <label class="text-[10px] font-black uppercase tracking-widest text-indigo-400 block mb-1.5 ml-1">HTML</label>
+            <pre class="coder-scrollbar bg-black/60 border border-indigo-500/10 text-indigo-300 p-4 rounded-xl text-xs font-mono overflow-x-auto overflow-y-auto h-64 md:h-80 select-text"><code>{{ selectedMatch().lastCoderCode || '// No HTML submitted by the Coder.' }}</code></pre>
+          </div>
+
+          <div class="bg-[#1a0c0c] border border-red-500/30 rounded-2xl p-4 flex flex-col justify-between shadow-lg shadow-red-950/20">
+            <div class="flex items-center justify-between border-b border-red-500/20 pb-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-base">🔍</span>
+                <span class="text-red-500 font-black text-xs uppercase tracking-widest">TESTER SUBSYSTEM</span>
+              </div>
+              <span class="font-mono text-xs font-bold text-white uppercase bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded">
+                {{ selectedMatch().roleInMatch === 'tester' ? profileData()?.handle : selectedMatch().opponent }}
+              </span>
+            </div>
+        
+            <label class="text-[10px] font-black uppercase tracking-widest text-red-400 block mb-1.5 ml-1">Playwright Tests</label>
+            <pre class="tester-scrollbar bg-black/60 border border-red-500/10 text-red-400 p-4 rounded-xl text-xs font-mono overflow-x-auto overflow-y-auto h-64 md:h-80 select-text"><code>{{ selectedMatch().lastTesterCode || '// No Playwright Test submitted by the Tester.' }}</code></pre>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  }
+
+  @if (isAvatarModalOpen()) {
+    <div class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fade-in">
+      <div class="bg-[#111827] border-2 border-indigo-500 max-w-lg w-full rounded-[2.5rem] p-6 shadow-2xl shadow-indigo-500/20">
+        
+        <div class="text-center mb-4">
+          <h3 class="text-indigo-400 uppercase tracking-[0.3em] text-[9px] font-black">Personalize Your Account</h3>
+          <h2 class="text-2xl font-black text-white italic uppercase tracking-tighter mt-0.5">Update Avatar</h2>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex gap-1 bg-[#0a0f1e] p-1 rounded-xl border border-white/5 overflow-x-auto">
+            @for (color of ['black', 'blue', 'red', 'green', 'gold']; track color) {
+              <button 
+                type="button"
+                (click)="setColorTab(color)"
+                class="flex-1 text-center py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all"
+                [class.bg-indigo-600]="activeColorTab() === color"
+                [class.text-white]="activeColorTab() === color"
+                [class.text-gray-500]="activeColorTab() !== color"
+              >
+                {{ color }}
+              </button>
+            }
+          </div>
+
+          <div class="bg-[#0a0f1e] border border-white/5 rounded-2xl p-4 min-h-[140px] flex items-center justify-center">
+            @if (filteredAvatars.length > 0) {
+              <div class="grid grid-cols-5 gap-4 w-full justify-items-center max-h-48 overflow-y-auto p-1">
+                @for (av of filteredAvatars; track av.file) {
+                  <div 
+                    (click)="selectAvatar(av.file)"
+                    class="relative w-14 h-14 rounded-full cursor-pointer group flex items-center justify-center transition-all active:scale-95"
+                  >
+                    <div class="absolute inset-0 rounded-full bg-slate-200"></div>
+                    <img 
+                      [src]="'/uploads/' + av.file" 
+                      class="relative z-10 w-14 h-14 rounded-full object-cover border-2 transition-all"
+                      [class.border-indigo-500]="selectedAvatarFile() === av.file"
+                      [class.shadow-[0_0_15px_rgba(99,102,241,0.6)]]="selectedAvatarFile() === av.file"
+                      [class.scale-105]="selectedAvatarFile() === av.file"
+                      [class.border-transparent]="selectedAvatarFile() !== av.file"
+                    />
+                    @if (selectedAvatarFile() === av.file) {
+                      <div class="absolute -top-1 -right-1 bg-indigo-500 rounded-full w-4 h-4 flex items-center justify-center z-20 shadow">
+                        <span class="text-[9px] font-bold text-white">✓</span>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="animate-pulse text-[10px] text-gray-600 uppercase font-bold tracking-wider">Scanning Pool...</div>
+            }
+          </div>
+
+          <div class="flex gap-3 pt-2">
+            <button 
+              type="button" 
+              (click)="isAvatarModalOpen.set(false)" 
+              [disabled]="isSavingAvatar()"
+              class="flex-1 bg-white/5 border border-white/10 hover:bg-white/10 py-3.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all"
+            >
+              BACK
+            </button>
+            <button 
+              type="button" 
+              (click)="saveNewAvatar()" 
+              [disabled]="isSavingAvatar() || selectedAvatarFile() === profileData()?.avatar"
+              class="flex-1 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-700 disabled:text-gray-500 text-white py-3.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(99,102,241,0.3)] flex items-center justify-center gap-2"
+            >
+              @if (isSavingAvatar()) {
+                <div class="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                SAVING...
+              } @else {
+                CONFIRM
+              }
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  }
+
+</section>

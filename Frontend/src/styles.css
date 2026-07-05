@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@import "ngx-toastr/toastr";
+
+@layer components {
+  .toast-success {
+    @apply !bg-teal-500; 
+  }
+
+  .toast-error {
+    background-color: #BD362F;
+  }
+
+  .toast-info {
+    background-color: #2F96B4;
+  }
+
+  .toast-warning {
+    background-color: #F89406;
+  }
+
+  a.link {
+    @apply underline text-teal-600 hover:text-teal-700 visited:text-teal-800;
+    /* Per il dark mode in v4, usa la variante dark: direttamente */
+    @apply dark:text-teal-400 dark:visited:text-amber-400;
+  }
+
+  .form-error {
+    @apply text-red-600 text-sm pt-2;
+    @apply dark:text-red-400;
+  }
+}

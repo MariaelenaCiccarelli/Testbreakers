@@ -1,0 +1,9 @@
+/* SHADOW COMPATIBILITY PER IL PRIMO POSTO */
+.text-shadow-amber {
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+}
+
+/* OTTIMIZZAZIONE TRANSIZIONE OVER/HOVER DELLE RIGHE */
+tr {
+  transition: background-color 0.2s ease;
+}

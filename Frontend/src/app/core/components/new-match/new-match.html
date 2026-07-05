@@ -1,0 +1,151 @@
+<div class="min-h-screen bg-[#0a0f1e] py-6 px-4 sm:px-12 flex flex-col justify-center items-center font-sans">
+
+  <button routerLink="/home" 
+      class="mb-6 md:mb-0 md:absolute md:top-8 md:left-8 flex items-center gap-2 px-4 py-2 border border-white/10 rounded-xl hover:bg-white/5 transition-all group self-start md:self-auto">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-400 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    </svg>
+    <span class="text-[10px] font-black text-white uppercase tracking-[0.2em]">BACK HOME</span>
+  </button>
+
+  <div class="max-w-xl w-full bg-[#111827] border-2 border-indigo-500/30 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 shadow-2xl shadow-indigo-500/10">
+    
+    <div class="text-center mb-6">
+      <h2 class="text-indigo-400 uppercase tracking-[0.3em] text-[10px] sm:text-xs mb-2">Match Configuration</h2>
+      <h2 class="text-2xl sm:text-3xl font-black text-white italic uppercase tracking-tighter">Start a New Match</h2>
+      <div class="h-1 w-20 bg-indigo-500 mx-auto mt-4 rounded-full"></div>
+    </div>
+
+    <form [formGroup]="newMatchForm" (ngSubmit)="newMatch()" class="space-y-4">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        
+        <div class="space-y-4 p-5 sm:p-6 bg-black/20 rounded-3xl border-2 border-white/5 hover:border-indigo-500/50 transition-all duration-300"
+             [ngClass]="isP1LoggedIn ? 'border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.2)]' : 'border-white/5'">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
+            <h3 class="text-xs font-black text-indigo-400 uppercase tracking-widest">Player 1</h3>
+          </div>
+          
+          <div class="space-y-3">
+            <div>
+              <label class="text-[10px] font-bold text-gray-500 uppercase ml-2">Handle</label>
+              <input type="text" formControlName="p1Handle"
+                placeholder="Handle"
+                [readonly]="isP1LoggedIn"
+                class="w-full bg-[#0a0f1e] border-2 border-white/5 rounded-xl py-2.5 sm:py-3 px-4 text-white focus:border-indigo-500 outline-none transition-all placeholder-gray-700 text-sm"
+                [ngClass]="{'opacity-50 cursor-not-allowed': isP1LoggedIn}">
+            </div>
+
+            <div>
+              <label class="text-[10px] font-bold text-gray-500 uppercase ml-2">Security Key</label>
+              <input type="password" formControlName="p1Password"
+                [readonly]="isP1LoggedIn"
+                [placeholder]="isP1LoggedIn ? '••••••••' : 'Password'"
+                class="w-full bg-[#0a0f1e] border-2 border-white/5 rounded-xl py-2.5 sm:py-3 px-4 text-white focus:border-indigo-500 outline-none transition-all placeholder-gray-700 text-sm"
+                [ngClass]="{'opacity-50 cursor-not-allowed': isP1LoggedIn}">
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4 p-5 sm:p-6 bg-black/20 rounded-3xl border-2 border-white/5 hover:border-indigo-500/50 transition-all duration-300">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
+            <h3 class="text-xs font-black text-indigo-400 uppercase tracking-widest">Player 2</h3>
+          </div>
+          
+          <div class="space-y-3">
+            <div>
+              <label class="text-[10px] font-bold text-gray-500 uppercase ml-2">Handle</label>
+              <input type="text" formControlName="p2Handle"
+                placeholder="Handle"
+                class="w-full bg-[#0a0f1e] border-2 border-white/5 rounded-xl py-2.5 sm:py-3 px-4 text-white focus:border-indigo-500 outline-none transition-all placeholder-gray-700 text-sm">
+            </div>
+
+            <div>
+              <label class="text-[10px] font-bold text-gray-500 uppercase ml-2">Security Key</label>
+              <input type="password" formControlName="p2Password"
+                placeholder="Password"
+                class="w-full bg-[#0a0f1e] border-2 border-white/5 rounded-xl py-2.5 sm:py-3 px-4 text-white focus:border-indigo-500 outline-none transition-all placeholder-gray-700 text-sm">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="p-5 sm:p-6 bg-black/40 rounded-3xl border-2 border-white/5">
+        <label class="block text-center text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Select {{ p2DisplayName }}'s role</label>
+        <div class="relative">
+          <select formControlName="p2Role"
+            class="w-full bg-[#0a0f1e] border-2 border-white/10 rounded-xl py-3.5 sm:py-4 px-4 text-white text-xs font-bold focus:border-indigo-500 outline-none appearance-none cursor-pointer">
+            <option value="" disabled selected>SELECT ROLE...</option>
+            <option value="coder">CODER</option>
+            <option value="tester">TESTER</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-black/40 rounded-2xl p-4 border-2 border-white/5 mb-4 animate-fade-in">
+        <label class="block text-center text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Select a Challenge</label>
+        <div class="relative">
+          <select formControlName="challengeId"
+            class="w-full bg-[#0a0f1e] border-2 border-white/10 rounded-xl py-3.5 sm:py-4 px-4 text-white text-xs font-bold focus:border-indigo-500 outline-none appearance-none cursor-pointer">
+            <option value="random">🎲 RANDOM CHALLENGE</option>
+            @for (ch of challengesList; track ch.challengeId) {
+              <option [value]="ch.challengeId">{{ ch.title | uppercase }}</option>
+            }
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+          </div>
+        </div>
+      </div>
+
+      @if (getSelectedChallengeDetails()) {
+        <div class="bg-indigo-950/30 border border-indigo-500/20 rounded-2xl p-4 sm:p-5 mb-4 animate-fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/5 pb-3">
+            <h4 class="text-indigo-400 font-black text-xs uppercase tracking-wider">
+              {{ getSelectedChallengeDetails().title }}
+            </h4>
+            
+            <div class="flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-400 text-[10px] sm:text-[11px] font-black tracking-widest uppercase self-start sm:self-auto shadow-md shadow-amber-950/40">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 animate-pulse text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 5h14M5 19h14m-2-14a5 5 0 01-5 5h0a5 5 0 01-5-5m10 14a5 5 0 00-5-5h0a5 5 0 00-5 5" />
+              </svg>
+              <span>{{ formatChallengeTime(getSelectedChallengeDetails().time) }}</span>
+            </div>
+          </div>
+          <p class="text-gray-400 text-[11px] sm:text-[12px] font-medium leading-relaxed mt-4">
+            {{ getSelectedChallengeDetails().description }}
+          </p>
+        </div>
+      } @else {
+        <div class="bg-slate-900/40 border border-slate-700/20 rounded-2xl p-4 mb-4 text-center">
+          <p class="text-gray-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">
+            You're gonna fight in a random challenge!
+          </p>
+        </div>
+      }
+
+      @if (newMatchForm.get('p2Role')?.value) {
+        <div class="text-center animate-fade-in px-2">
+          <span class="block sm:inline-block bg-indigo-600/20 text-indigo-400 px-4 py-2 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest border border-indigo-500/30 break-words leading-relaxed">
+            {{ p1DisplayName }} will be the {{ newMatchForm.get('p2Role')?.value === 'coder' ? 'tester' : 'coder' }}
+          </span>
+        </div>
+      }
+
+      <div class="pt-2">
+        <button type="submit"
+          [disabled]="!newMatchForm.valid"
+          class="w-full bg-white text-[#0a0f1e] py-3.5 sm:py-4 rounded-2xl font-black text-sm sm:text-base uppercase italic tracking-tighter hover:scale-[1.01] sm:hover:scale-[1.02] active:scale-95 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] disabled:opacity-20 disabled:grayscale disabled:cursor-not-allowed">
+          Let's Go to the Arena!
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

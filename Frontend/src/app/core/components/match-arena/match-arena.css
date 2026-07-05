@@ -1,0 +1,121 @@
+pre::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+pre::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+/* Scrollbar per l'editor del CODER */
+.text-indigo-100::-webkit-scrollbar {
+  width: 6px;
+}
+.text-indigo-100::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+.text-indigo-100::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+  border-radius: 10px;
+  border: 2px solid #0d121f;
+}
+.text-indigo-100::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.6);
+}
+
+/* Scrollbar per l'editor del TESTER */
+.text-rose-100::-webkit-scrollbar {
+  width: 6px;
+}
+.text-rose-100::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+.text-rose-100::-webkit-scrollbar-thumb {
+  background: rgba(244, 63, 94, 0.3);
+  border-radius: 10px;
+  border: 2px solid #0d121f;
+}
+.text-rose-100::-webkit-scrollbar-thumb:hover {
+  background: rgba(244, 63, 94, 0.6);
+}
+
+/* Custom Scrollbars per i nuovi elementi contenitori editabili */
+.arena-editor-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.arena-editor-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+/* Stile per i campi di input dei selettori del Tester */
+.tester-editable-input {
+  display: inline-block;
+  min-width: 140px;
+  background: rgba(244, 63, 94, 0.05);
+  border-bottom: 2px dashed rgba(244, 63, 94, 0.4);
+  color: #ffe4e6; /* text-rose-100 */
+  padding: 0 6px;
+  margin: 0 4px;
+  border-radius: 4px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.tester-editable-input[contenteditable="true"]:focus {
+  background: rgba(244, 63, 94, 0.15);
+  border-bottom: 2px solid #f43f5e; /* border-rose-500 */
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.1);
+}
+
+/* Placeholder personalizzato per i blocchi vuoti del Tester */
+.tester-editable-input:empty::before {
+  content: attr(placeholder);
+  color: rgba(244, 63, 94, 0.3);
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+/* Forza la visualizzazione corretta delle righe del codice del Tester */
+.editor-line {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: #ffffff !important; /* 🌟 REQUISITO: Forza tutto il testo fisso del Tester in bianco puro */
+}
+
+/* Protezione strutturale totale contro la modifica o la cancellazione degli ID */
+[contenteditable="false"] {
+  display: inline-block !important;
+  user-select: none !important;
+  pointer-events: auto !important; /* Abilitiamo il mouse per far vedere il cursore di divieto */
+  cursor: not-allowed !important;  /* Mostra la freccia con il cerchio barrato di divieto */
+  
+  /* Dice al browser che l'ID è di sola lettura assoluta */
+  -webkit-user-modify: read-only !important;
+  user-modify: read-only !important;
+  
+  font-weight: bold;
+  padding: 0 4px;
+}

@@ -1,0 +1,222 @@
+[
+  {
+    "title": "Login Form",
+    "description": "The following login form must contain a username field, an email field, and a submit button.",
+    "particularities": {
+      "cannotDouble": [
+        "id=\"login-form\"",
+        "id=\"username\"",
+        "id=\"password\"",
+        "id=\"submit-button\""
+      ],
+      "expectedOrder": [
+        "username",
+        "password",
+        "submit-button"
+      ]
+    },
+    "templateHTML": "<form id=\"login-form\" class=\"auth-form\">\n    <h2>Login to your account</h2>\n    \n    <div class=\"form-group\">\n    <label for=\"username\">Username</label>\n    <input type=\"text\" id=\"username\" name=\"user\" placeholder=\"Insert username\" class=\"input-field\" />\n    </div>\n\n    <div class=\"form-group\">\n    <label for=\"password\">Password</label>\n    <input type=\"password\" id=\"password\" name=\"pass\" class=\"input-field\" />\n    </div>\n\n    <button type=\"submit\" id=\"submit-button\" class=\"btn btn-primary\">Submit</button>\n</form>",
+    "templateTest": "test('Test Login Form', async ({ page }) => {\n  // Identify the Username field\n  const usernameInput = page.locator('css=');\n  await usernameInput.fill('my_user');\n\n  // Identify the Password field\n  const passwordInput = page.locator('css=');\n  await passwordInput.fill('secret123');\n\n  // Identify the Button\n  const submitButton = page.locator('css=');\n  await expect(submitButton).toBeVisible();\n  await submitButton.click();\n});",
+    "time": "60"
+  },
+  {
+    "title": "Player rankings",
+    "description": "A list of players with streaks on an online platform.",
+    "particularities": {
+      "cannotDouble": [
+        "id=\"leaderboard-section\"",
+        "id=\"players-list\"",
+        "id=\"player-item-1\"",
+        "id=\"player-item-2\"",
+        "id=\"player-item-3\""
+      ],
+      "expectedOrder": [
+        "player-item-1",
+        "player-item-2",
+        "player-item-3"
+      ]
+    },
+    "templateHTML": "<section id=\"leaderboard-section\" class=\"leaderboard-container\">\n  <div class=\"leaderboard-header\">\n    <h2>Top Players</h2>\n    <span class=\"badge status-active\">Active Season</span>\n  </div>\n\n  <ul id=\"players-list\" class=\"players-list\">\n    <li id=\"player-item-1\" class=\"player-item rank-first\">\n      <span class=\"player-name\">Mario_99</span>\n      <span class=\"streak-count\" data-streak=\"12\">🔥 12 Over</span>\n    </li>\n    <li id=\"player-item-2\" class=\"player-item\">\n      <span class=\"player-name\">Luigi_Dev</span>\n      <span class=\"streak-count\" data-streak=\"5\">🔥 5 Over</span>\n    </li>\n    <li id=\"player-item-3\" class=\"player-item rank-last\">\n      <span class=\"player-name\">Peach_Princess</span>\n      <span class=\"streak-count\" data-streak=\"0\">❄️ 0 Over</span>\n    </li>\n  </ul>\n</section>",
+    "templateTest": "test('Test Player rankings', async ({ page }) => {\n  // The first item on the list\n  const selector = page.locator('css=');\n  await expect(selector).toHaveText('Mario_99');\n\n  // The second item on the list\n  const selector = page.locator('css=');\n  await expect(selector).toHaveText('🔥 5 Over');\n\n  // The third item on the list\n  const selector = page.locator('css=');\n  await expect(selector).toHaveText('Peach_Princess');\n});",
+    "time": "90"
+  },
+  {
+    "title": "Shopping Cart",
+    "description": "A sidebar widget that displays a summary of products added to the cart, along with their quantity counters and the applied discount badge.",
+    "particularities": {
+      "cannotDouble": [
+        "id=\"header\"",
+        "id=\"promo\"",
+        "id=\"cart-widget\"",
+        "id=\"cart-list\"",
+        "id=\"cart-item-1\"",
+        "id=\"cart-item-2\"",
+        "id=\"cart-item-3\""
+      ],
+      "expectedOrder": [
+        "cart-item-1",
+        "cart-item-2",
+        "cart-item-3"
+      ]
+    },
+    "templateHTML": "<div id=\"cart-widget\" class=\"cart-container\">\n  <div id=\"header\" class=\"cart-header\">\n    <h3>Your Cart</h3>\n    <span id=\"promo\" class=\"discount-badge\" data-promo=\"SUMMER26\">Sconto 10%</span>\n  </div>\n  <ul id=\"cart-list\" class=\"cart-items\">\n    <li id=\"cart-item-1\" class=\"item-box promo-active\">\n      <span class=\"item-title\">Mechanical Keyboard</span>\n      <span class=\"qty-badge\" data-qty=\"1\">Qty: 1</span>\n    </li>\n    <li id=\"cart-item-2\" class=\"item-box\">\n      <span class=\"item-title\">Wireless Mouse</span>\n      <span class=\"qty-badge\" data-qty=\"2\">Qty: 2</span>\n    </li>\n    <li id=\"cart-item-3\" class=\"item-box item-gift\">\n      <span class=\"item-title\">Dev Sticker (Free)</span>\n      <span class=\"qty-badge\" data-qty=\"0\">Free</span>\n    </li>\n  </ul>\n</div>",
+    "templateTest": "test('Test Shopping Cart', async ({ page }) => {\n  // Identify the first item in the cart\n  const firstItem = page.locator('css=');\n  await expect(firstItem).toHaveText('Mechanical Keyboard');\n\n  // Identify the quantity of the second element\n  const secondItemQty = page.locator('css=');\n  await expect(secondItemQty).toHaveText('Qty: 2');\n\n  // Identify the title of the last item\n  const thirdItemTitle = page.locator('css=');\n  await expect(thirdItemTitle).toHaveText('Dev Sticker (Free)');\n});",
+    "time": "120"
+  },
+  {
+    "title": "User Profile",
+    "description": "A mini-dashboard that displays a registered user's information, including an avatar, match win counter, and a button to toggle the \"Online\" status.",
+    "particularities": {
+      "cannotDouble": [
+        "id=\"avatar-box\"",
+        "id=\"user-info\"",
+        "id=\"username\"",
+        "id=\"profile-card\"",
+        "id=\"user-avatar\"",
+        "id=\"user-stat\"",
+        "id=\"victories\"",
+        "id=\"status-toggle\""
+      ],
+      "expectedOrder": [
+        "user-avatar",
+        "username",
+        "victories",
+        "status-toggle"
+      ]
+    },
+    "templateHTML": "<div id=\"profile-card\" class=\"user-panel text-center\">\n  <div id=\"avatar-box\" class=\"avatar-box\">\n    <img id=\"user-avatar\" src=\"avatar.png\" alt=\"Profilo Sviluppatore\" class=\"img-rounded\">\n    <span class=\"role-tag font-bold\">VIP Player</span>\n  </div>\n\n  <div id=\"user-info\" class=\"user-info\">\n    <h2 id=\"username\" class=\"username-display\">Mario_99</h2>\n    <p class=\"user-bio\">Frontend Engine & Arena Master</p>\n  </div>\n\n  <div id=\"user-stat\" class=\"analytics-row\" data-victory=\"42\">\n    <span class=\"stat-label\">Vittorie Totali:</span>\n    <span id=\"victories\" class=\"stat-value\">42 Match</span>\n  </div>\n\n  <button id=\"status-toggle\" type=\"button\" class=\"btn-toggle status-offline\">Attiva Stato</button>\n</div>",
+    "templateTest": "test('Test User Profile', async ({ page }) => {\n  // Identify the user avatar image\n  const userAvatar = page.locator('css=');\n  await expect(userAvatar).toBeVisible();\n\n  // Identify the username\n  const username = page.locator('css=');\n  await expect(username).toHaveText('Mario_99');\n\n  // Identify the numerical win counter\n  const victoryCount = page.locator('css=');\n  await expect(victoryCount).toHaveText('42 Match');\n\n  // Identify the state toggle button\n  const toggleBtn = page.locator('css=');\n  await expect(toggleBtn).toBeVisible();\n  await toggleBtn.click();\n});",
+    "time": "120"
+  },
+  {
+    "title": "System Navbar",
+    "description": "The main navigation bar of the application, containing the company logo (an image), a link to the settings and a special link to log out.",
+    "particularities": {
+      "cannotDouble": [
+        "id=\"main-nav\"",
+        "id=\"nav-logo\"",
+        "id=\"nav-settings\"",
+        "id=\"nav-logout\""
+      ],
+      "expectedOrder": [
+        "nav-logo",
+        "nav-settings",
+        "nav-logout"
+      ]
+    },
+    "templateHTML": "<nav id=\"main-nav\" class=\"navbar-container\">\n  <div class=\"nav-brand\">\n    <img id=\"nav-logo\" src=\"logo.svg\" alt=\"Logo Corporate\" class=\"logo-main\">\n  </div>\n\n  <div class=\"nav-links\">\n    <a id=\"nav-settings\" href=\"/settings\" class=\"link-item text-muted\">Settings</a>\n    <a id=\"nav-logout\" href=\"/logout\" class=\"link-item action-danger\">Exit</a>\n  </div>\n</nav>",
+    "templateTest": "test('Test System Navbar', async ({ page }) => {\n  // Identify the company logo\n  const logo = page.locator('css=');\n  await expect(logo).toBeVisible();\n\n  // Identify the Settings Link\n  const settingsLink = page.locator('css=');\n  await expect(settingsLink).toHaveAttribute('href', '/settings');\n\n  // Identify the Logout Link to exit\n  const logoutLink = page.locator('css=');\n  await expect(logoutLink).toHaveText('Exit');\n});",
+    "time": "120"
+  },
+  {
+    "title": "Product Grid",
+    "description": "A grid view showing featured product cards. Each card contains a product image, current price, and an icon/button to add the product to your favorites.",
+    "particularities": {
+      "cannotDouble": [
+        "id=\"products-grid\"",
+        "id=\"prod-card-1\"",
+        "id=\"prod-card-2\"",
+        "id=\"prod-card-3\"",
+        "id=\"product-image\"",
+        "id=\"price-link\"",
+        "id=\"button\""
+      ],
+      "expectedOrder": [
+        "product-image",
+        "price-link",
+        "button"
+      ]
+    },
+    "templateHTML": "<div id=\"products-grid\" class=\"grid-layout\">\n  <div class=\"grid-header\">\n    <h2>Featured</h2>\n  </div>\n  \n  <div id=\"prod-card-1\" class=\"product-card hot-deal\">\n    <img id=\"product-image\" src=\"laptop.png\" alt=\"Laptop Gaming\" class=\"prod-img\">\n    <span class=\"price-tag\">1200€</span>\n  </div>\n  \n  <div id=\"prod-card-2\" class=\"product-card\">\n    <a id=\"price-link\" class=\"price-link\" data-price=\"600\">600€</a>\n  </div>\n  \n  <div id=\"prod-card-3\" class=\"out-of-stock\">\n    <span class=\"price-tag\">150€</span>\n    <button id=\"button\" type=\"button\" class=\"btn-fav\" disabled>Not Available</button>\n  </div>\n</div>",
+    "templateTest": "test('Test Product Grid', async ({ page }) => {\n  // Identify the first product image\n  const firstImg = page.locator('css=');\n  await expect(firstImg).toBeVisible();\n\n  // Identify the price of the second product\n  const secondPrice = page.locator('css=');\n  await expect(secondPrice).toHaveText('600€');\n\n  // Identify the disabled button of the last product\n  const disabledBtn = page.locator('css=');\n  await expect(disabledBtn).toBeDisabled();\n});",
+    "time": "90"
+  },
+  {
+    "title": "Social Post",
+    "description": "A post card within a social media feed. It contains the author's profile image, the post text, and an interactive \"Like\" button.",
+    "particularities": {
+      "cannotDouble": [
+        "id=\"social-card\"",
+        "id=\"author-img\"",
+        "id=\"post-link\"",
+        "id=\"like-button\""
+      ],
+      "expectedOrder": [
+        "author-img",
+        "post-link",
+        "like-button"
+      ]
+    },
+    "templateHTML": "<div id=\"social-card\" class=\"feed-card shadow-sm\">\n  <div class=\"card-header flex items-center\">\n    <img id=\"author-img\" src=\"avatar-social.png\" alt=\"Post Author\" class=\"avatar-sm\">\n    <span class=\"author-name font-bold\">Luca_Web</span>\n  </div>\n\n  <div class=\"card-body\">\n    <p class=\"post-text\">Today I hardened the interface of my new app!</p>\n    <a id=\"post-link\" href=\"/tag/coding\" class=\"hashtag-item\" data-tag=\"coding\">#coding</a>\n  </div>\n\n  <div class=\"card-footer\">\n    <button id=\"like-button\" type=\"button\" class=\"btn-like action-active\">Like</button>\n  </div>\n</div>",
+    "templateTest": "test('Test Social Post', async ({ page }) => {\n  // Identify the author's profile picture\n  const authorAvatar = page.locator('css=');\n  await expect(authorAvatar).toBeVisible();\n\n  // Identify the post's hashtag link\n  const hashtagLink = page.locator('css=');\n  await expect(hashtagLink).toHaveAttribute('href', '/tag/coding');\n\n  // Identify the Like button\n  const likeBtn = page.locator('css=');\n  await expect(likeBtn).toBeVisible();\n  await likeBtn.click();\n});",
+    "time": "50"
+  },
+  {
+    "title": "Tasks List",
+    "description": "Una lista di controllo per tracciare le attività di sviluppo del team. Ogni riga rappresenta una task e contiene un elemento interattivo (un link di dettaglio, un bottone di completamento o un'icona di eliminazione).",
+    "particularities": {
+      "cannotDouble": [
+        "id=\"todo-container\"",
+        "id=\"task-list\"",
+        "id=\"task-1\"",
+        "id=\"task-2\"",
+        "id=\"task-3\"",
+        "id=\"second-task-button\"",
+        "id=\"third-task-button\"",
+        "id=\"link-details\"",
+        "id=\"second-task-button\"",
+        "id=\"third-task-button\""
+      ],
+      "expectedOrder": [
+        "link-details",
+        "second-task-button",
+        "third-task-button"
+      ]
+    },
+    "templateHTML": "<div id=\"todo-container\" class=\"dashboard-widget\">\n  <div class=\"widget-header\">\n    <h2>Sprint Log</h2>\n  </div>\n\n  <ul id=\"task-list\" class=\"todo-list\">\n    <li id=\"task-1\" class=\"todo-item priority-high\">\n      <span class=\"task-name\">Fix Refactoring Backend</span>\n      <a id=\"link-details\" href=\"/tasks/101\" class=\"link-details\" data-nav=\"details\">See Info</a>\n    </li>\n    <li id=\"task-2\" class=\"todo-item task-pending\">\n      <span class=\"task-name\">Optimize CSS</span>\n      <button id=\"second-task-button\" type=\"button\" class=\"btn-check\">Complete Task</button>\n    </li>\n    <li id=\"task-3\" class=\"todo-item task-locked\">\n      <span class=\"task-name\">Release to Production</span>\n      <button id=\"third-task-button\" type=\"button\" class=\"btn-lock\" disabled>Task Blocked</button>\n    </li>\n  </ul>\n</div>",
+    "templateTest": "test('Test Tasks List', async ({ page }) => {\n  // Identify the detail link of the first task\n  const taskLink = page.locator('css=');\n  await expect(taskLink).toHaveAttribute('href', '/tasks/101');\n\n  // Identify the second task completion button\n  const completeBtn = page.locator('css=');\n  await expect(completeBtn).toBeVisible();\n\n  // Identify the stuck button of the last task\n  const lockedBtn = page.locator('css=');\n  await expect(lockedBtn).toBeDisabled();\n});",
+    "time": "100"
+  },
+  {
+    "title": "Newsletter Subscription",
+    "description": "A subscription box to receive platform updates. It contains an email input field, a privacy policy acceptance checkbox, and a confirmation button.",
+    "particularities": {
+      "cannotDouble": [
+        "id=\"form\"",
+        "id=\"newsletter-box\"",
+        "id=\"news-email\"",
+        "id=\"news-privacy\"",
+        "id=\"news-submit\""
+      ],
+      "expectedOrder": [
+        "news-email",
+        "news-privacy",
+        "news-submit"
+      ]
+    },
+    "templateHTML": "<div id=\"newsletter-box\" class=\"subscribe-panel text-center\">\n  <h3>Rimani Aggiornato</h3>\n  <form id=\"form\" class=\"newsletter-form\">\n    <div class=\"input-group\">\n      <input type=\"email\" id=\"news-email\" name=\"subscriber_email\" placeholder=\"Your best email\" class=\"input-dark\" />\n    </div>\n    <div class=\"check-group\">\n      <input type=\"checkbox\" id=\"news-privacy\" name=\"privacy_check\" class=\"checkbox-custom\" />\n      <label for=\"news-privacy\">I accept the terms and data processing</label>\n    </div>\n    <button type=\"submit\" id=\"news-submit\" class=\"btn-submit action-glow\">Subscribe Now</button>\n  </form>\n</div>",
+    "templateTest": "test('Test Newsletter Subscription', async ({ page }) => {\n  // Identify the Email input field\n  const emailInput = page.locator('css=');\n  await emailInput.fill('test@arena.com');\n\n  // Identify the Privacy checkbox\n  const privacyCheck = page.locator('css=');\n  await privacyCheck.check();\n\n  // Identify the subscription button\n  const submitBtn = page.locator('css=');\n  await expect(submitBtn).toBeVisible();\n  await submitBtn.click();\n});",
+    "time": "160"
+  },
+  {
+    "title": "Notification Preferences",
+    "description": "A configuration panel within the user settings to manage notification reception. It contains a checkbox for email, one for push messages, and a button to save changes.",
+    "particularities": {
+      "cannotDouble": [
+        "id=\"settings-panel\"",
+        "id=\"notify-email\"",
+        "id=\"notify-push\"",
+        "id=\"save-settings\"",
+        "id=\"form\""
+      ],
+      "expectedOrder": [
+        "notify-email",
+        "notify-push",
+        "save-settings"
+      ]
+    },
+    "templateHTML": "<div id=\"settings-panel\" class=\"preferences-box\">\n  <div class=\"panel-header\">\n    <h2>System Notifications</h2>\n  </div>\n  <form id=\"form\" class=\"settings-form\">\n    <div class=\"option-row\">\n      <input type=\"checkbox\" id=\"notify-email\" name=\"channel_email\" class=\"toggle-input\" checked />\n      <label for=\"notify-email\">Get updates via email</label>\n    </div>\n    <div class=\"option-row\">\n      <input type=\"checkbox\" id=\"notify-push\" name=\"channel_push\" class=\"toggle-input\" />\n      <label for=\"notify-push\">Attiva le Notifiche Push nel browser</label>\n    </div>\n    <div class=\"action-row\">\n      <button type=\"submit\" id=\"save-settings\" class=\"btn-save variant-glow\">Save Preferences</button>\n    </div>\n  </form>\n</div>",
+    "templateTest": "test('Test Notification Preferences, async ({ page }) => {\n  // Identify the first checkbox\n  const emailCheckbox = page.locator('css=');\n  await emailCheckbox.uncheck();\n\n  // Identify the second checkbox\n  const pushCheckbox = page.locator('css=');\n  await pushCheckbox.check();\n\n  // Identify the save button\n  const saveBtn = page.locator('css=');\n  await expect(saveBtn).toBeVisible();\n  await saveBtn.click();\n});",
+    "time": "150"
+  }
+]

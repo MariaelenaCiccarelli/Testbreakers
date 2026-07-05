@@ -1,0 +1,52 @@
+<nav class="bg-[#111827]/80 backdrop-blur-md border-b-2 border-indigo-500/10 px-8 py-4 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+
+  <div routerLink="/home" class="flex items-center cursor-pointer group">
+    <img 
+      src="/logo.png" 
+      alt="Testbreakers Logo" 
+      class="h-8 w-auto object-contain group-hover:scale-105 transition-transform duration-300 dynamic-shadow" 
+    />
+  </div>
+
+  <div class="flex items-center gap-6">
+    
+    @if (!isLoggedIn()) {
+      <button routerLink="/login" 
+              class="px-5 py-2 border border-indigo-500/30 rounded-xl text-xs font-black uppercase tracking-widest text-indigo-400 hover:bg-indigo-500/10 hover:border-indigo-500 transition-all active:scale-95">
+        LOGIN
+      </button>
+    }
+
+    @else {
+      <div class="flex items-center gap-4 border-l border-white/10 pl-6">
+        
+        <div (click)="handleNavigationClick()" routerLink="/personal-area" class="flex items-center gap-3 cursor-pointer group">
+          <div class="text-right hidden sm:block">
+            <p class="text-[10px] font-black text-indigo-400 uppercase tracking-widest leading-none mb-1">HI,</p>
+            <p class="text-xs font-bold text-white tracking-tighter italic uppercase group-hover:text-indigo-300 transition-colors">
+              {{ userHandle() }}
+            </p>
+          </div>
+
+          <div class="relative w-9 h-9 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-slate-200"></div>
+            <img [src]="avatarUrl" 
+                 class="relative z-10 w-9 h-9 rounded-full object-cover border border-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.3)] group-hover:scale-105 transition-all" />
+          </div>
+        </div>
+
+        <button (click)="handleNavigationClick()" routerLink="/logout" 
+                class="p-2 text-gray-500 hover:text-rose-400 transition-colors" 
+                title="Logout">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+        </button>
+
+      </div>
+    }
+
+  </div>
+</nav>
+
+<div class="h-[72px]"></div>

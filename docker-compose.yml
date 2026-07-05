@@ -1,0 +1,57 @@
+services:
+  # --- DATABASE SUBSYSTEM ---
+  database:
+    image: postgres:15-alpine
+    container_name: pg_container_dev
+    restart: always
+    # Diciamo a questo specifico container di caricare TUTTE le variabili da qui
+    env_file:
+      - ./Backend/.env
+    environment:
+      # Esplicitiamo l'assegnazione: Postgres leggerà le variabili caricate dall'env_file sopra
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${DB_USER} -d $${DB_NAME}"] # Nota il doppio $$ per evitare conflitti in Docker
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --- BACKEND API SUBSYSTEM ---
+  backend:
+    build: ./Backend
+    container_name: testbreakers_backend_container
+    restart: always
+    env_file:
+      - ./Backend/.env
+    environment:
+      # Sovrascriviamo l'host del .env locale per farlo parlare con il container DB
+      - DB_HOST=database
+      - TOKEN_SECRET=${TOKEN_SECRET}
+    volumes:
+      # Montiamo il volume esterno condiviso per memorizzare i JSON dei match
+      - ./Dataset:/usr/src/Dataset
+      #  Sincronizza la cartella /data in tempo reale durante il riavvio per l'aggiunta di nuove challenge
+      - ./Backend/data:/usr/src/app/data
+    depends_on:
+      database:
+        condition: service_healthy
+
+  # --- FRONTEND CLIENT SUBSYSTEM ---
+  frontend:
+    build: ./Frontend
+    container_name: testbreakers_frontend_container
+    restart: always
+    ports:
+      - "4200:80" # Mappiamo la porta 80 di Nginx sulla classica 4200 locale
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+    driver: local

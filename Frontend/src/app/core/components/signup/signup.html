@@ -1,0 +1,132 @@
+<section class="min-h-screen bg-[#0a0f1e] flex flex-col md:flex-row items-center justify-center px-4 py-8 sm:py-12 font-sans relative overflow-x-hidden overflow-y-auto">
+    
+    <button routerLink="/home" 
+            class="mb-6 md:mb-0 md:absolute md:top-8 md:left-8 flex items-center gap-2 px-4 py-2 border border-white/10 rounded-xl hover:bg-white/5 transition-all group self-start md:self-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-400 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span class="text-[10px] font-black text-white uppercase tracking-[0.2em]">BACK HOME</span>
+    </button>
+
+    <div class="w-full max-w-lg bg-[#111827] border-2 border-indigo-500/30 rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 shadow-2xl shadow-indigo-500/10 my-auto">
+        <div class="text-center mb-6">
+            <h3 class="text-indigo-400 uppercase tracking-[0.3em] text-[10px] mb-2 font-black">Create Your Own Profile</h3>
+            <h1 class="text-3xl font-black text-white italic uppercase tracking-tighter">SIGNUP</h1>
+            <div class="h-1 w-16 bg-indigo-500 mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <form class="space-y-6" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+            
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-gray-500 uppercase ml-2 tracking-widest">Handle</label>
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        formControlName="handle"
+                        placeholder="Es: Neo_Coder"
+                        class="w-full bg-[#0a0f1e] border-2 border-white/5 rounded-xl py-3 px-4 text-white focus:border-indigo-500 outline-none transition-all placeholder-gray-700 font-mono"
+                        [class.border-red-500]="submitted() && signupForm.get('handle')?.invalid"
+                    />
+                </div>
+                @if (submitted() && signupForm.get('handle')?.errors?.['required']) {
+                    <p class="text-[10px] text-rose-500 font-bold uppercase ml-2 mt-1 animate-pulse">L'identificativo handle è obbligatorio.</p>
+                }
+                @if (submitted() && signupForm.get('handle')?.errors?.['minlength']) {
+                    <p class="text-[10px] text-rose-500 font-bold uppercase ml-2 mt-1 animate-pulse">L'handle deve contenere almeno 3 caratteri.</p>
+                }
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-gray-500 uppercase ml-2 tracking-widest">Security Key</label>
+                <div class="relative">
+                    <input 
+                        type="password" 
+                        formControlName="password"
+                        placeholder="••••••••"
+                        class="w-full bg-[#0a0f1e] border-2 border-white/5 rounded-xl py-3 px-4 text-white focus:border-indigo-500 outline-none transition-all placeholder-gray-700 font-mono"
+                        [class.border-red-500]="submitted() && signupForm.get('password')?.invalid"
+                    />
+                </div>
+                @if (submitted() && signupForm.get('password')?.errors?.['required']) {
+                    <p class="text-[10px] text-rose-500 font-bold uppercase ml-2 mt-1 animate-pulse">The security key is mandatory.</p>
+                }
+                @if (submitted() && signupForm.get('password')?.errors?.['minlength']) {
+                    <p class="text-[10px] text-rose-500 font-bold uppercase ml-2 mt-1 animate-pulse">Your securiry key must contain at least 4 characters.</p>
+                }
+            </div>
+
+            <div class="space-y-2 pt-2">
+                <label class="text-[10px] font-black text-gray-500 uppercase ml-2 tracking-widest">Choose Your Avatar</label>
+                
+                <div class="flex gap-1.5 bg-[#0a0f1e] p-1 rounded-xl border border-white/5 overflow-x-auto">
+                    @for (color of ['black', 'blue', 'red', 'green', 'gold']; track color) {
+                        <button 
+                            type="button"
+                            (click)="setColorTab(color)"
+                            class="flex-1 text-center py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all"
+                            [class.bg-indigo-600]="activeColorTab() === color"
+                            [class.text-white]="activeColorTab() === color"
+                            [class.text-gray-500]="activeColorTab() !== color"
+                            [class.hover:text-gray-300]="activeColorTab() !== color"
+                        >
+                            {{ color }}
+                        </button>
+                    }
+                </div>
+
+                <div class="bg-[#0a0f1e] border border-white/5 rounded-2xl p-4 min-h-[120px] flex items-center justify-center">
+                    @if (filteredAvatars.length > 0) {
+                        <div class="grid grid-cols-5 gap-4 w-full justify-items-center">
+                            @for (av of filteredAvatars; track av.file) {
+                                <div 
+                                    (click)="selectAvatar(av.file)"
+                                    class="relative w-14 h-14 rounded-full cursor-pointer group flex items-center justify-center transition-transform active:scale-95"
+                                pid="avatar-item">
+                                    <div class="absolute inset-0 rounded-full bg-slate-200"></div>
+
+                                    <img 
+                                        [src]="'/uploads/' + av.file" 
+                                        class="relative z-10 w-14 h-14 rounded-full object-cover border-2 transition-all"
+                                        [class.border-indigo-500]="selectedAvatar() === av.file"
+                                        [class.shadow-[0_0_15px_rgba(99,102,241,0.6)]]="selectedAvatar() === av.file"
+                                        [class.scale-105]="selectedAvatar() === av.file"
+                                        [class.border-transparent]="selectedAvatar() !== av.file"
+                                        [class.group-hover:border-white/30]="selectedAvatar() !== av.file"
+                                    />
+
+                                    @if (selectedAvatar() === av.file) {
+                                        <div class="absolute -top-1 -right-1 bg-indigo-500 rounded-full w-4 h-4 flex items-center justify-center z-20 shadow">
+                                            <span class="text-[9px] font-bold text-white">✓</span>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    } @else {
+                        <p class="text-[10px] text-gray-500 italic uppercase tracking-wider">Nessun avatar disponibile per questo blocco</p>
+                    }
+                </div>
+            </div>
+
+            <div class="pt-2">
+                <button type="submit" 
+                    [disabled]="isLoading()"
+                    class="w-full bg-white text-[#0a0f1e] disabled:bg-gray-300 py-4 rounded-2xl font-black text-lg uppercase italic tracking-tighter hover:scale-[1.02] active:scale-95 transition-all shadow-[0_0_20px_rgba(255,255,255,0.05)] flex items-center justify-center gap-2"
+                >
+                    @if (isLoading()) {
+                        <div class="w-4 h-4 border-2 border-[#0a0f1e] border-t-transparent rounded-full animate-spin"></div>
+                        Loading...
+                    } @else {
+                        SIGNUP
+                    }
+                </button>
+            </div>
+
+            <div class="text-center mt-2">
+                <a routerLink="/login" class="text-xs text-indigo-400 hover:underline tracking-wide">Already have an account? Login</a>
+            </div>
+
+        </form>
+
+    </div>
+</section>

@@ -1,0 +1,299 @@
+@if (challenge()) {
+@if (showInstructions()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0f1e]/95 backdrop-blur-md p-4 sm:p-6 lg:p-8">
+  
+  <div class="bg-[#111827] border-2 border-indigo-500/50 p-6 sm:p-10 lg:p-12 rounded-[2rem] max-w-9xl w-full text-center shadow-2xl overflow-y-auto max-h-[90vh]">
+    
+    <div #stepRules class="block">
+      <h3 class="text-amber-400 uppercase tracking-[0.3em] text-xs sm:text-sm mb-4">Match Arena Rules</h3>
+      <h1 class="text-xl sm:text-2xl font-black text-white mb-2 uppercase italic">Match and Validation Rules</h1>
+      
+      <div class="text-left bg-black/20 px-4 py-2 sm:px-6 sm:py-4 rounded-2xl border border-white/5 mb-6 space-y-3">
+        <p class="text-gray-300 text-sm sm:text-base leading-relaxed m-0 py-1">
+          <strong class="text-white">1. Round-Robin Match:</strong> The match is played one round at a time between <span class="text-rose-400 font-bold">Tester</span> and <span class="text-indigo-400 font-bold">Coder</span> .
+        </p>
+        <div class="text-gray-300 text-sm sm:text-base leading-relaxed m-0 py-1">
+          <strong class="text-white block mb-2">2. Rules for testers:</strong>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>
+              <span class="text-rose-300 font-semibold">Testers</span> must use Playwright's CSS locator syntax to identify the "core elements" of the HTML code to be tested (as explained in the challenge description and comments);
+            </li>
+            <li>
+              <span class="text-rose-300 font-semibold">Testers</span> cannot use CSS syntax that identifies HTML tags via IDs, such as <code class="bg-[#111827] px-1.5 py-0.5 rounded text-indigo-400 font-mono text-xs">"#"</code> or <code class="bg-[#111827] px-1.5 py-0.5 rounded text-indigo-400 font-mono text-xs">"id="</code>;
+            </li>
+            <li>
+              <span class="text-rose-300 font-semibold">Testers</span> must respect the syntax and unambiguity constraints set by Playwright.
+            </li>
+          </ul>
+        </div>
+        <div class="text-gray-300 text-sm sm:text-base leading-relaxed m-0 py-1">
+          <strong class="text-white block mb-2">3. Rules for Coders:</strong>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>
+              <span class="text-indigo-400 font-semibold">Coders</span> are authorized to tamper with the HTML code in such a way as to modify the relevant DOM tree and break the CSS selectors written in the test;
+            </li>
+            <li>
+              <span class="text-indigo-400 font-semibold">Coders</span> may absolutely not tamper with the IDs of the "core elements" of the given HTML; furthermore, they are not authorized to duplicate them or reverse their original order;
+            </li>
+            <li>
+              To tamper with the tests, <span class="text-indigo-400 font-semibold">Coders</span> may add or remove their own nodes to the DOM tree and/or change any other attribute to DOM elements, except for HTML tags.
+            </li>
+          </ul>
+        </div>
+        <div class="text-gray-300 text-sm sm:text-base leading-relaxed m-0 py-1">
+          <strong class="text-white block mb-2">4. The only difference compared to Playwright's standard behavior:</strong>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>
+              The <span class="text-rose-300 font-semibold">Tester</span> doesn't just need to make a selector work: selectors must necessarily identify and test the "core elements".
+            </li>
+            <li>
+              To the <span class="text-indigo-400 font-semibold">Coder</span> will be only accepted submissions that break the test selectors with respect to the <i>"core elements"</i>.
+            </li>
+          </ul>
+        </div>
+        <p class="text-gray-300 text-sm sm:text-base leading-relaxed m-0 py-1">
+          <strong class="text-white">5. Watch out for the time!</strong> The challenge will continue until one of the two players runs out of time, declaring the other the winner.
+        </p>
+      </div>
+
+      <button (click)="stepRules.style.display = 'none'; stepChallenge.style.display = 'block'"
+        class="w-max mx-auto block bg-white text-[#0a0f1e] py-4 px-10 rounded-2xl font-black text-l uppercase italic tracking-tighter hover:scale-[1.05] active:scale-95 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] disabled:opacity-20 disabled:grayscale disabled:cursor-not-allowed">
+        UNDERSTOOD!
+      </button>
+    </div>
+
+    <div #stepChallenge style="display: none;">
+      <h3 class="text-indigo-400 uppercase tracking-[0.3em] text-xs sm:text-sm mb-4">Challenge Description</h3>
+      <h1 class="text-xl sm:text-2xl font-black text-white mb-2 uppercase italic">{{ challenge()?.title }}</h1>
+      
+      <div class="text-left bg-black/20 px-4 py-2 sm:px-6 sm:py-4 rounded-2xl border border-white/5 mb-6">
+        @for (line of formatDescription(challenge()?.description); track $index) {
+        <p class="text-gray-300 text-sm sm:text-base mb-3 leading-relaxed last:mb-0">
+          {{ line.trim() }}
+        </p>
+        }
+      </div>
+
+      <div class="flex flex-col sm:flex-row justify-center items-center gap-8 sm:gap-16 pt-4 sm:pt-8 mb-6">
+        <div class="flex flex-col items-center">
+          <div class="relative w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center">
+            <h2 class="absolute -top-8 left-1/2 -translate-x-1/2 text-sm sm:text-l font-black italic uppercase tracking-tighter mb-2 whitespace-nowrap">{{ testerDisplayName }}</h2>
+            <div class="absolute inset-0 rounded-full bg-slate-200"></div>
+            <img [src]="testerAvatarUrl"
+              class="relative z-10 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-rose-500 object-cover shadow-[0_0_20px_rgba(244,63,94,0.5)]">
+            <div
+              class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-rose-500 text-[10px] px-2 py-0.5 rounded-full font-black text-white uppercase z-20">
+              Tester</div>
+          </div>
+        </div>
+        <div class="flex items-center justify-center my-4 sm:my-0">
+          <img 
+            src="/vs3.gif" 
+            alt="Versus Animation" 
+            class="h-20 sm:h-32 w-auto object-contain select-none transform hover:scale-105 transition-transform duration-300" 
+          />
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="relative w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center">
+            <h2 class="absolute -top-8 left-1/2 -translate-x-1/2 text-sm sm:text-l font-black italic uppercase tracking-tighter mb-2 whitespace-nowrap">{{ coderDisplayName }}</h2>
+            <div class="absolute inset-0 rounded-full bg-slate-200"></div>
+            <img [src]="coderAvatarUrl"
+              class="relative z-10 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-indigo-500 object-cover shadow-[0_0_20px_rgba(99,102,241,0.5)]">
+            <div
+              class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-indigo-500 text-[10px] px-2 py-0.5 rounded-full font-black text-white uppercase z-20">
+              Coder</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center mb-6 mt-6 sm:mt-12">
+        <div class="flex items-center gap-2.5 px-5 py-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-400 text-[11px] sm:text-[12px] font-black tracking-widest uppercase shadow-md shadow-amber-950/40">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 animate-pulse text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 5h14M5 19h14m-2-14a5 5 0 01-5 5h0a5 5 0 01-5-5m10 14a5 5 0 00-5-5h0a5 0 00-5 5" />
+          </svg>
+          <span>You each have {{ formatChallengeTime(challenge()?.time) }} for this challenge</span>
+        </div>
+      </div>
+
+      <button (click)="closeInstructions()"
+        class="w-max mx-auto block bg-white text-[#0a0f1e] py-4 px-10 rounded-2xl font-black text-l uppercase italic tracking-tighter hover:scale-[1.05] active:scale-95 transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] disabled:opacity-20 disabled:grayscale disabled:cursor-not-allowed">
+        LET'S START!
+      </button>
+    </div>
+
+  </div>
+</div>
+}
+
+<div class="min-h-screen bg-[#0a0f1e] p-4 sm:p-8 flex flex-col text-white transition-all duration-700"
+  [class.blur-xl]="showInstructions()">
+  
+  <div class="mb-6 sm:mb-8 flex flex-col w-full">
+    <div class="flex flex-col sm:flex-row justify-between items-start w-full gap-4 mb-4">
+      <div>
+        <h3 class="text-indigo-400 text-xs uppercase tracking-widest mb-1">You are solving:</h3>
+        <h2 class="text-lg sm:text-xl font-black italic uppercase tracking-tighter text-white">{{ challenge()?.title }}</h2>
+      </div>
+
+      <div class="w-full sm:w-auto flex-shrink-0">
+        <button (click)="resignFromMatch()" 
+          class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 border-2 border-red-500/30 bg-red-950/20 rounded-xl hover:bg-red-600/20 text-red-400 hover:text-red-300 transition-all font-black text-[10px] uppercase tracking-widest shadow-lg shadow-red-950/50">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 21V3m0 2h13l2 3-2 3H3m0 6h10l2-2.5-2-2.5H3" />
+          </svg>
+          Abandon Match
+        </button>
+      </div>
+    </div>
+
+    <div class="max-w-4xl">
+      @for (line of formatDescription(challenge()?.description); track $index) {
+        <p class="text-gray-300 text-sm sm:text-base mb-1 leading-relaxed last:mb-0">
+          {{ line.trim() }}
+        </p>
+      }
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 flex-1 overflow-y-auto lg:overflow-hidden pb-6">
+
+    <div class="flex flex-col gap-3 sm:gap-4 min-h-[350px] lg:min-h-0">
+      <div class="flex justify-between items-center px-2 sm:px-4">
+        <div class="flex items-center gap-3">
+          <div class="relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-slate-200"></div>
+            <img [src]="testerAvatarUrl" class="relative z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-rose-500 object-cover">
+          </div>
+          <div>
+            <p class="text-[9px] sm:text-[10px] font-black text-rose-400 uppercase tracking-widest leading-none mb-1">Tester</p>
+            <p class="text-xs sm:text-sm font-bold text-white leading-none tracking-tighter italic uppercase">{{ testerDisplayName }}</p>
+          </div>
+        </div>
+        <span class="text-2xl sm:text-3xl font-mono font-bold tracking-tighter" [class.text-rose-500]="turn() === 'tester'">
+          {{ formatTime(testerTimeLeft()) }}
+        </span>
+      </div>
+
+      <div class="flex-1 bg-[#0d121f] border-2 rounded-[2rem] p-4 sm:p-6 transition-all duration-500 relative flex flex-col overflow-hidden"
+        [ngClass]="turn() === 'tester' ? 'border-rose-500 shadow-xl opacity-100' : 'border-gray-800 opacity-60'">
+        <pre class="flex-1 overflow-y-auto font-mono text-xs sm:text-sm text-rose-100 outline-none m-0 arena-editor-scroll pb-12"><code>@for (row of testerRows; track $index) {<div class="editor-line flex items-center min-h-[1.5rem] whitespace-pre"><span class="select-none pr-1">{{ row.prefix }}</span>@if (row.suffix) {<span [attr.contenteditable]="turn() === 'tester'" (keydown)="handleTabKey($event)" class="tester-editable-input" placeholder="css_selector" [innerText]="row.selector"></span><span class="select-none">{{ row.suffix }}</span>}</div>}</code></pre>
+        @if (turn() === 'tester') {
+        <div class="absolute top-4 right-6 flex items-center gap-2 bg-[#0d121f]/80 backdrop-blur-sm pl-2 py-1 rounded-lg">
+          <span class="w-2 h-2 bg-rose-500 rounded-full animate-ping"></span>
+          <span class="text-[10px] font-black text-rose-500 uppercase">Live Coding</span>
+        </div>
+        }
+      </div>
+
+      @if (turn() === 'tester') {
+      <button (click)="submitTurn()" [disabled]="turn() !== 'tester'" class="w-full bg-rose-600 text-white py-4 sm:py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-rose-500 transition-all active:scale-95 text-sm">
+        Submit and Verify Tests
+      </button>
+      }
+    </div>
+
+    <div class="flex flex-col gap-3 sm:gap-4 min-h-[350px] lg:min-h-0">
+      <div class="flex justify-between items-center px-2 sm:px-4 text-right">
+        <span class="text-2xl sm:text-3xl font-mono font-bold tracking-tighter" [class.text-indigo-500]="turn() === 'coder'">
+          {{ formatTime(coderTimeLeft()) }}
+        </span>
+        <div class="flex items-center gap-3 text-right flex-row-reverse">
+          <div class="relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-slate-200"></div>
+            <img [src]="coderAvatarUrl" class="relative z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-indigo-500 object-cover">
+          </div>
+          <div>
+            <p class="text-[9px] sm:text-[10px] font-black text-indigo-400 uppercase tracking-widest leading-none mb-1">Coder</p>
+            <p class="text-xs sm:text-sm font-bold text-white leading-none tracking-tighter italic uppercase">{{ coderDisplayName }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-1 bg-[#0d121f] border-2 rounded-[2rem] p-4 sm:p-6 transition-all duration-500 relative flex flex-col overflow-hidden"
+        [ngClass]="turn() === 'coder' ? 'border-indigo-500 shadow-xl opacity-100' : 'border-gray-800 opacity-60'">
+        <div id="coder-contenteditable-editor" [innerHTML]="coderHtmlProcessed" [attr.contenteditable]="turn() === 'coder'" (keydown)="handleTabKey($event)"
+          class="flex-1 overflow-y-auto font-mono text-xs sm:text-sm text-indigo-100 outline-none whitespace-pre select-text arena-editor-scroll text-indigo-100 pb-12">
+        </div>
+        @if (turn() === 'coder') {
+        <div class="absolute top-4 right-6 flex items-center gap-2 bg-[#0d121f]/80 backdrop-blur-sm pl-2 py-1 rounded-lg">
+          <span class="w-2 h-2 bg-indigo-500 rounded-full animate-ping"></span>
+          <span class="text-[10px] font-black text-indigo-500 uppercase">Live Coding</span>
+        </div>
+        }
+      </div>
+
+      @if (turn() === 'coder') {
+      <button (click)="submitTurn()" [disabled]="turn() !== 'coder'" class="w-full bg-indigo-600 text-white py-4 sm:py-5 rounded-2xl font-black uppercase tracking-widest hover:bg-indigo-500 transition-all active:scale-95 text-sm">
+        Submit and Verify HTML
+      </button>
+      }
+    </div>
+
+  </div>
+</div>
+
+@if (showResults()) {
+<div class="fixed inset-0 z-[60] flex items-center justify-center bg-[#0a0f1e]/98 backdrop-blur-xl px-4 sm:px-12 py-6 sm:py-12 text-center">
+  
+  <div class="max-w-2xl w-full max-h-[95vh] overflow-y-auto py-4 px-4 scrollbar-thin">
+    
+    <h1 class="text-3xl sm:text-5xl font-black italic uppercase text-white mb-4 tracking-tighter">
+      @if (turn() === 'tester'){
+        {{ lastResult()?.status === 'match_finished' ? 'MATCH FINISHED' : 'BROKEN TESTS' }}
+      }
+      @else {
+        {{ lastResult()?.status === 'match_finished' ? 'MATCH FINISHED' : 'CORRECT TESTS' }}
+      }
+    </h1>
+
+    <p class="text-base sm:text-xl text-gray-400 mb-6 sm:mb-8 uppercase tracking-widest">
+      {{ lastResult()?.message }}
+    </p>
+
+    @if (lastResult()?.status === 'match_finished') {
+      <div class="bg-[#111827] border-2 p-6 sm:p-8 rounded-[2.5rem] mb-6 sm:mb-8 flex flex-col items-center shadow-2xl transition-all duration-500"
+        [class.border-indigo-500/50]="lastResult()?.winner === 'coder'"
+        [class.border-rose-500/50]="lastResult()?.winner === 'tester'">
+
+        <h2 class="font-black text-xs uppercase mb-4 tracking-[0.3em]"
+          [class.text-indigo-400]="lastResult()?.winner === 'coder'"
+          [class.text-rose-400]="lastResult()?.winner === 'tester'">
+            WINNER
+        </h2>
+
+        <div class="relative flex flex-col items-center">
+          <h2 class="text-xl sm:text-2xl font-black italic uppercase tracking-tighter mb-4 text-white">
+            {{ lastResult()?.winner === 'coder' ? coderDisplayName : testerDisplayName }}
+          </h2>
+
+          <div class="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-slate-200"></div>
+            <img [src]="lastResult()?.winner === 'coder' ? coderAvatarUrl : testerAvatarUrl"
+              class="relative z-10 w-28 h-28 sm:w-32 sm:h-32 rounded-full border-4 object-cover transition-all" [ngClass]="{
+                    'border-indigo-500 shadow-[0_0_30px_rgba(99,102,241,0.6)]': lastResult()?.winner === 'coder',
+                    'border-rose-500 shadow-[0_0_30px_rgba(244,63,94,0.6)]': lastResult()?.winner === 'tester'
+                  }">
+
+            <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 text-[10px] px-4 py-1 rounded-full font-black text-white uppercase tracking-widest z-20"
+              [class.bg-indigo-500]="lastResult()?.winner === 'coder'"
+              [class.bg-rose-500]="lastResult()?.winner === 'tester'">
+              {{ lastResult()?.winner === 'coder' ? 'Coder' : 'Tester' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <button (click)="goToNextRound()"
+      class="w-full sm:w-auto bg-white text-black px-12 sm:px-20 py-4 sm:py-5 rounded-2xl font-black text-lg sm:text-xl uppercase italic hover:scale-105 active:scale-95 transition-all shadow-xl mt-4">
+      {{ lastResult()?.status === 'match_finished' ? 'BACK HOME' : 'LET\'S GO' }}
+    </button>
+  </div>
+</div>
+}
+} @else {
+<div class="h-screen w-full flex flex-col items-center justify-center bg-[#0a0f1e] text-white font-black italic uppercase tracking-[0.5em] p-4 text-center">
+  <div class="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+  Loading Arena...
+</div>
+}
