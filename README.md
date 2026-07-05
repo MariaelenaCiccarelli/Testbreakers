@@ -1,4 +1,95 @@
-# In questo file sono presenti i comandi per le procedure di avvio e gestione del sistema, e le indicazioni per espandere il pool di sfide
+#[EN] This file contains the commands for launching and managing the system, as well as instructions for expanding the challenge pool.
+
+To simplify launching and managing Testbreakers, the entire application is dockerized and orchestrated using Docker Compose. The following are the key commands for managing the container lifecycle and querying the database.
+
+### Launching and Managing the Application
+
+Before running any commands, ensure the `.env` file is correctly configured in the `./Backend/` directory.
+
+**Initialization and Recompilation (First Run or Structural Changes)**
+Run on first run, or whenever you modify configuration files (such as `Dockerfile`, `package.json`, or when adding a new challenge to the challenge pool):
+
+docker compose --env-file ./Backend/.env up --build
+
+### Infrastructure Shutdown
+Shuts down containers, freeing up RAM on the host computer while preserving data persistence within the volumes:
+docker compose down
+
+### Quick Restart
+To restart the entire infrastructure using the images already compiled in the cache:
+docker compose --env-file ./Backend/.env up
+
+### Real-Time Log Inspection
+To monitor application behavior or intercept any error messages during game sessions:
+* **Global logs for all services**: docker compose logs -f
+* **Logs Express API Backend Specific Logs**: docker compose logs -f backend
+* **Nginx/Angular Frontend Specific Logs**: docker compose logs -f frontend
+* **PostgreSQL Database Specific Logs**: docker compose logs -f database
+
+### Database Queries and Querying
+PostgreSQL exposes internal port 5432 on the local port defined in the ${DB_PORT} variable in the .env file (e.g., 5432 or 5433). You can query the database:
+docker compose exec database psql -U your_db_user -d your_db_name
+(Replace your_db_user and your_db_name with the actual credentials from the .env file)
+
+Once at the PostgreSQL prompt, you can type standard SQL queries (remembering the final semicolon), such as:
+SELECT * FROM "Players";
+
+To exit the Postgres command line interface, type \q and press Enter.
+
+### Total Cleanup and Environment Reset (Hard Reset)
+If you need to force a deep system cleanup, removing obsolete caches, residual files, or orphaned memory states:
+
+Deep removal of orphaned containers and volumes:
+docker compose down --volumes --remove-orphans
+
+Purge the internal builder cache (BuildKit Cache in Docker Desktop):
+docker builder prune -a -f
+
+Remove all unused images (including those marked as dangling):
+docker image prune -a -f
+
+Global security cleanup (Tabula Rasa):
+docker system prune -a --volumes -f
+
+## Guide to Creating New Challenges (Challenge Pool)
+
+The system integrates an automatic synchronization mechanism that populates and updates the PostgreSQL challenge pool from a structured JSON archive. To expand the Challenge pool, a new challenge must be inserted into the new-challenges.json file, strictly adhering to the document's structural constraints and gameplay criteria.
+
+### General Structure of the JSON Object
+
+Each challenge is represented by an independent JSON object and must have the following primary fields:
+
+* **title**: A string identifying the name of the challenge (e.g., "Login Form"). Uniqueness Constraint: Each challenge must have its own title, different from the others.
+* **description**: A concise textual overview that informs the programmer and tester of the minimum requirements and the elements that must be manipulated or intercepted during the rounds.
+* **time**: The maximum time in seconds allotted to each participant to complete their round before a timeout occurs (e.g., "60").
+
+### Defining the HTML Template and Initial Test
+
+Writing the initial code requires utmost care to avoid compromising the JSDOM virtual engine and client display:
+
+* **templateHTML**: Represents the initial DOM code fragment. It must contain clean HTML markup, with unique structural IDs on the core nodes you intend to protect or test.
+* **templateTest**: This constitutes the skeleton of the initial Playwright test delivered to the Tester during the first round. The code must include the `page.locator('css=')` methods, with the search string intentionally left empty after the `css=` prefix, allowing the player to fill in the targeted selector.
+
+### Integrity Constraints and Anti-Cheat Mechanisms
+
+The section called **particularities** constitutes the algorithmic core that secures the challenge rules and is divided into two fundamental arrays:
+
+The first is the **cannotDouble** vector. The sensitive identifying attributes of the original template must be inserted into it, in the form of complete literal strings (e.g., `id=\"username\"`). The backend will use this blacklist to verify that the Coder, during his manipulation phase, does not clone or duplicate these IDs in the DOM with the malicious intent of crashing the Tester's selectors due to a violation of Strict Mode.
+
+The second is the **expectedOrder** vector. This array must contain the purified IDs (e.g., `"username"`) of the core nodes in the exact positional order in which they appear within the DOM tree, from top to bottom. This sequence is actively used by the backend to validate the Tester's turn, ensuring that they are testing the interface while respecting the correct semantic order of the page and without excluding any key challenge components, and the Coder's turn, as they are unable to move core DOM elements.
+
+### Synchronization and Change Application Procedure
+
+Once the new JSON object has been inserted into the challenge pool, updating does not require manual intervention on the relational database. The Testbreakers infrastructure manages the alignment via a real-time bind mount. The only operational requirement for the changes to take effect and upload the new challenges to the Arena is to restart the backend container using Docker Compose. Upon restart, the seeding procedure intercepts the new file, performs a differential check, and synchronizes PostgreSQL without altering the history of past matches.
+If changes are necessary to challenges, deleting challenges is strongly discouraged, as this would also delete the associated matches, thus altering player statistics and potentially distorting them. If necessary, make the changes using direct database queries.
+
+## Dataset Management
+The Dataset is also managed by Docker and is structured as a directory containing individual JSON files for each match completed or in progress on the platform (Bind Mount). Even if you perform a deep platform reset, the files within the folder will continue to exist despite the database reset: to avoid data inconsistency, manually removing the files is recommended.
+
+
+
+
+# [IT] In questo file sono presenti i comandi per le procedure di avvio e gestione del sistema, e le indicazioni per espandere il pool di sfide
 
 Per semplificare l'avvio e la gestione di Testbreakers, l'intera applicazione è dockerizzata e orchestrata tramite Docker Compose. Di seguito sono riportati i comandi fondamentali per la gestione del ciclo di vita dei container e per l'interrogazione della base di dati.
 
@@ -84,4 +175,4 @@ Una volta inserito il nuovo oggetto JSON all'interno del pool di sfide, l'aggior
 In caso di necessaria modifica alle sfide, è vivamente sconsigliata l'eliminazione delle challenge, in quanto questo comporterebbe anche l'eliminazione dei match associati, con conseguente modifica alle statistiche dei giocatori, rischiando di falsarle. Se necessario, procedere alla modifica tramite query dirette al database.
 
 ## Gestione del Dataset
-Il Dataset è è isolato all’interno di un volume Docker e si struttura come una directory contenente singoli file JSON per ciascun match completato o in corso sulla piattaforma. Anche in caso di reset del Database e della piattaforma, i file all'interno del volume continueranno ad esistere: per evitare inconsistenza dei dati, è consigliata la rimozione manuale dei file.
+Il Dataset è gestito anch'esso da Docker e si struttura come una directory contenente singoli file JSON per ciascun match completato o in corso sulla piattaforma (Bind Mount). Anche in caso di reset profondo della piattaforma, i file all'interno della cartella continueranno ad esistere nonostante l'azzeramento del Database: per evitare inconsistenza dei dati, è consigliata la rimozione manuale dei file.
