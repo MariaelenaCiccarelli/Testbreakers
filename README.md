@@ -1,4 +1,4 @@
-#[EN] This file contains the commands for launching and managing the system, as well as instructions for expanding the challenge pool.
+# [EN] This file contains the commands for launching and managing the system, as well as instructions for expanding the challenge pool.
 
 To simplify launching and managing Testbreakers, the entire application is dockerized and orchestrated using Docker Compose. The following are the key commands for managing the container lifecycle and querying the database.
 
